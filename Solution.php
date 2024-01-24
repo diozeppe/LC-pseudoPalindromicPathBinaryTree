@@ -29,16 +29,16 @@ class Solution {
         $this->path[] = $t->val;
         $this->freq[$t->val] = $this->freq[$t->val]+1??1;
         
-        if (is_null($t->left) && is_null($t->right)) {
+        if (!$t->left && !$t->right) {
             if ($this->isCurrentPathPseudoPalindrome()) {
                 $this->count++;
             }
         } else {
-            if (!is_null($t->left)) {
+            if ($t->left) {
                 $this->run($t->left);
             }
         
-            if (!is_null($t->right)) {
+            if ($t->right) {
                 $this->run($t->right);
            }
         }
