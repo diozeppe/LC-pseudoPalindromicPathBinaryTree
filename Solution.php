@@ -12,48 +12,46 @@
  * }
  */
 class Solution {
+    public $count = 0;
+    public $path = [];
+    public $freq = [];
 
     /**
      * @param TreeNode $root
      * @return Integer
      */
     function pseudoPalindromicPaths($root) {
-        $count = 0;
-        $path = [];
-        $ocor = [];
-
-        $this->run($root, $count, $path, $ocor);
-        return $count;
+        $this->run($root);
+        return $this->count;
     }
 
-    function run(TreeNode &$t, &$count, &$path, &$ocor) {
-        $path[] = $t->val;
-        $ocor[$t->val] = $ocor[$t->val]+1??1;
+    function run(TreeNode &$t) {
+        $this->path[] = $t->val;
+        $this->freq[$t->val] = $this->freq[$t->val]+1??1;
         
         if (is_null($t->left) && is_null($t->right)) {
-            if ($this->isPseudoPalindrome($ocor)) {
-                $count++;
+            if ($this->isCurrentPathPseudoPalindrome()) {
+                $this->count++;
             }
         } else {
             if (!is_null($t->left)) {
-                $this->run($t->left, $count, $path, $ocor);
+                $this->run($t->left);
             }
         
             if (!is_null($t->right)) {
-                $this->run($t->right, $count, $path, $ocor);
+                $this->run($t->right);
            }
         }
 
-        array_pop($path);
-        $ocor[$t->val] = $ocor[$t->val]-1??0;
+        array_pop($this->path);
+        $this->freq[$t->val] = $this->freq[$t->val]-1??0;
     }
 
-    function isPseudoPalindrome(&$ocor){
+    function isCurrentPathPseudoPalindrome(){
         $count = 0;
-        foreach($ocor as $v){
-            if ($v % 2 > 0) {
+        foreach($this->freq as $val){
+            if (!($val % 2 == 0)) {
                 $count++;
-
                 if ($count > 1) {
                     return false;
                 }
